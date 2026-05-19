@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block title %}View Applicants - Campus Hire{% endblock %}
+
+{% block content %}
+<div class="ch-dashboard-container">
+    <aside class="ch-dashboard-sidebar">
+        <div class="brand"><h2><span class="ch-blue">Campus</span> Hire</h2></div>
+        <nav>
+            <ul>
+                <li><a href="{% url 'recruiter-dashboard' %}">Dashboard</a></li>
+                <li><a href="{% url 'postjob' %}">Post Job</a></li>
+                <li><a href="{% url 'view-jobs' %}">My Jobs</a></li>
+                <li class="active"><a href="{% url 'viewst' %}">Applicants</a></li>
+                <li><a href="{% url 'ranks' %}">Leaderboard</a></li>
+                <li><a href="{% url 'logout' %}" style="color:#ef4444;">Logout</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="ch-dashboard-main">
+        <h1 class="h2">Applicants</h1>
+
+        {% if job_applications %}
+        {% for item in job_applications %}
+        <section class="ch-dashboard-section" style="margin-bottom:1.5rem;">
+            <div class="section-header">
+                <h3 class="h3">{{ item.job.title }} — {{ item.job.company }}</h3>
+                <div style="display:flex;gap:0.5rem;align-items:center;">
+                    {% if item.job.is_active %}<span style="color:#22c55e;font-size:0.85rem;">Active</span>
+                    {% else %}<span style="color:#aaa;font-size:0.85rem;">Closed</span>{% endif %}
+                    <a href="{% url 'schedule-interview' item.job.id %}" class="primary-btn small-btn">Schedule Interview</a>
+                </div>
+            </div>
+
+            {% if item.applications %}
+            <div style="display:flex;flex-direction:column;gap:0.75rem;margin-top:0.75rem;">
+                {% for app in item.applications %}
+                <div style="background:#1e1e1f;border-radius:0.5rem;padding:1rem;">
+                    <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:0.5rem;">
+                        <div>
+                            <a href="{% url 'student-profile' app.student.id %}" style="font-weight:700;color:#4b4bd7;font-size:1rem;">
+                                {{ app.student.user.username }}
+                            </a>
+                            <p style="color:#aaa;font-size:0.85rem;">{{ app.student.user.email }}</p>
+                            <p style="color:#aaa;font-size:0.8rem;">
+                                Applied: {{ app.applied_at|date:"d M Y" }} |
+                                Marks: {{ app.student.total_marks }} |
+                                Interviews attended: {{ app.student.interview_attended }}
+                            </p>
+                            {% if app.student.skills %}
+                            <p style="color:#ccc;font-size:0.8rem;">Skills: {{ app.student.skills }}</p>
+                            {% endif %}
+                        </div>
+                        <div style="text-align:right;">
+                            <span class="status-{{ app.status }}">{{ app.get_status_display }}</span>
+                            {% if app.score %}<p style="color:#4b4bd7;font-weight:700;font-size:0.9rem;margin-top:0.25rem;">Score: {{ app.score }}/100</p>{% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Update Form -->
+                    <form method="POST" action="{% url 'update-application' app.id %}"
+                        style="margin-top:0.75rem;display:flex;flex-wrap:wrap;gap:0.5rem;align-items:center;border-top:1px solid #333;padding-top:0.75rem;">
+                        {% csrf_token %}
+                        <label style="color:#aaa;font-size:0.8rem;">Status:</label>
+                        <select name="status" style="background:#27282a;color:#fff;border:1px solid #444;border-radius:0.3rem;padding:0.3rem 0.5rem;font-size:0.85rem;">
+                            {% for val, label in app.STATUS_CHOICES %}
+                            <option value="{{ val }}" {% if app.status == val %}selected{% endif %}>{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                        <label style="color:#aaa;font-size:0.8rem;">Score:</label>
+                        <input type="number" name="score" value="{{ app.score }}" min="0" max="100"
+                            style="width:80px;background:#27282a;color:#fff;border:1px solid #444;border-radius:0.3rem;padding:0.3rem 0.5rem;font-size:0.85rem;">
+                        <input type="text" name="recruiter_notes" value="{{ app.recruiter_notes }}" placeholder="Note for student..."
+                            style="flex:1;min-width:160px;background:#27282a;color:#fff;border:1px solid #444;border-radius:0.3rem;padding:0.3rem 0.5rem;font-size:0.85rem;">
+                        <button type="submit" class="primary-btn small-btn">Update</button>
+                    </form>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p style="color:#aaa;margin-top:0.75rem;">No applicants for this job yet.</p>
+            {% endif %}
+        </section>
+        {% endfor %}
+        {% else %}
+        <p style="color:#aaa;">No jobs posted yet. <a href="{% url 'postjob' %}" class="ch-blue">Post a job</a></p>
+        {% endif %}
+    </main>
+</div>
+{% endblock %}

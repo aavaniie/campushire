@@ -1,0 +1,122 @@
+@media (min-width: 768px) {
+    html {
+        font-size: calc(100vw * 16/1500);
+    }
+    h1, .h1 {
+        font-size: 3rem;
+        line-height: 3.5rem;
+    }
+
+    h2, .h2 {
+        font-size: 2.5rem;
+        line-height: 3rem;
+    }
+
+    h3, .h3 {
+        font-size: 2rem;
+        line-height: 2.5rem;
+    }
+
+    h4, .h4 {
+        font-size: 1.5rem;
+        line-height: 2rem;
+    }
+
+    h5, .h5 {
+        font-size: 1.25rem;
+        line-height: 1.75rem;
+    }
+
+    h6, .h6, p {
+        font-size: 1.125rem;
+        line-height: 1.625rem;
+    }
+    .container {
+        max-width: 75rem;
+    }
+    /* Form Styles */
+    form {
+        gap: 1.563rem;
+    }
+    input, select {
+        font-size: 1.125rem;
+        line-height: 1.625rem;
+        padding: 0.625rem 0.938rem;
+    }
+    input::placeholder {
+        font-size: 1.125rem;
+        line-height: 1.625rem;  
+    }
+    label {
+        font-size: 1rem;
+    }
+    label.checkbox {
+        font-size: 1rem;
+    }
+    .form-flex p a {
+        font-size: 1rem;
+    }
+    /* Buttons */
+    .primary-btn {
+        padding: 0.75rem 1.5rem;
+        font-size: 1.125rem;
+        line-height: 1;  
+    }
+    /* Login */
+    .login-card {
+        padding: 2.5rem;
+    }
+    /* Landing Page */
+    .ch-landing-section {
+        gap: 3.125rem;
+        max-width: 62.5rem;
+    }
+    .ch-landing-sections {
+        flex-direction: row;
+        gap: 1.25rem;
+    }
+    .ch-landing-items {
+        width: 18.75rem;
+        height: 18.75rem;
+        gap: 1.25rem;
+    }
+    .ch-landing-items svg {
+        width: 3.125rem;
+        height: 3.125rem;
+    }  
+    /* Dashboard */
+    .ch-dashboard-container {
+        flex-direction: row;
+    }
+
+    .ch-dashboard-sidebar {
+        flex-direction: column;
+        width: 20rem;
+        overflow-y: auto;
+    }
+
+    .ch-dashboard-sidebar nav ul {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .ch-dashboard-main {
+        flex: 1;
+        padding: 2rem;
+    }
+    /* ---------------------------Jobs List - Desktop---------------------------- */
+    .job-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.5rem 1.8rem;
+    }
+
+    .job-title {
+        font-size: 1.25rem;
+    }
+    .profile-card  {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+}

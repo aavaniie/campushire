@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+
+{% block title %}My Profile - Campus Hire{% endblock %}
+
+{% block content %}
+<div class="ch-dashboard-container">
+    <aside class="ch-dashboard-sidebar">
+        <div class="brand"><h2><span class="ch-blue">Campus</span> Hire</h2></div>
+        <nav>
+            <ul>
+                <li><a href="{% url 'student-dashboard' %}">Dashboard</a></li>
+                <li class="active"><a href="{% url 'profile' %}">Profile</a></li>
+                <li><a href="{% url 'jobs' %}">Jobs</a></li>
+                <li><a href="{% url 'myjobs' %}">My Jobs</a></li>
+                <li><a href="{% url 'my-interviews' %}">My Interviews</a></li>
+                <li><a href="{% url 'ranks' %}">Leaderboard</a></li>
+                <li><a href="{% url 'logout' %}" style="color:#ef4444;">Logout</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="ch-dashboard-main">
+        <h1 class="h2">My Profile</h1>
+
+        <section class="ch-dashboard-section">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1rem;margin-bottom:1rem;">
+                <div>
+                    <h2 style="margin:0;font-size:1.6rem;">{{ student.user.username }}</h2>
+                    <p style="color:#aaa;margin:0.25rem 0;">{{ student.user.email }}</p>
+                    {% if student.is_approved %}
+                        <span class="badge-approved">Account Approved</span>
+                    {% else %}
+                        <span class="badge-pending-approval">Pending Supervisor Approval</span>
+                    {% endif %}
+                </div>
+                {% if student.badge %}
+                <div style="background:#4b4bd7;color:#fff;padding:0.5rem 1rem;border-radius:0.5rem;font-weight:600;">
+                    {{ student.badge }}
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Stats Row -->
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem;">
+                <div style="background:#1e1e1f;border-radius:0.75rem;padding:1.25rem;text-align:center;">
+                    <p style="font-size:2rem;font-weight:700;color:#4b4bd7;">{% if rank %}#{{ rank }}{% else %}–{% endif %}</p>
+                    <p style="color:#aaa;font-size:0.85rem;">Leaderboard Rank</p>
+                </div>
+                <div style="background:#1e1e1f;border-radius:0.75rem;padding:1.25rem;text-align:center;">
+                    <p style="font-size:2rem;font-weight:700;color:#4b4bd7;">{{ student.total_marks }}</p>
+                    <p style="color:#aaa;font-size:0.85rem;">Total Marks</p>
+                </div>
+                <div style="background:#1e1e1f;border-radius:0.75rem;padding:1.25rem;text-align:center;">
+                    <p style="font-size:2rem;font-weight:700;color:{% if student.placed %}#22c55e{% else %}#4b4bd7{% endif %};">
+                        {% if student.placed %}Yes{% else %}No{% endif %}
+                    </p>
+                    <p style="color:#aaa;font-size:0.85rem;">Placed{% if student.placed %} @ {{ student.company }}{% endif %}</p>
+                </div>
+            </div>
+
+            <!-- Info -->
+            <div style="display:flex;flex-direction:column;gap:0.75rem;">
+                {% if student.skills %}
+                <div>
+                    <p style="color:#aaa;font-size:0.8rem;margin-bottom:0.4rem;">Skills</p>
+                    <div style="display:flex;flex-wrap:wrap;gap:0.4rem;">
+                        {% for skill in student.skills.split %}
+                        <span style="background:#4b4bd7;color:#fff;padding:0.2rem 0.5rem;border-radius:4px;font-size:0.8rem;">{{ skill }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+                {% if student.experience %}
+                <div style="background:#1e1e1f;border-radius:0.5rem;padding:0.75rem 1rem;">
+                    <p style="color:#aaa;font-size:0.8rem;margin-bottom:0.25rem;">Experience</p>
+                    <p>{{ student.experience }}</p>
+                </div>
+                {% endif %}
+                {% if student.internship %}
+                <div style="background:#1e1e1f;border-radius:0.5rem;padding:0.75rem 1rem;">
+                    <p style="color:#aaa;font-size:0.8rem;margin-bottom:0.25rem;">Internships</p>
+                    <p>{{ student.internship }}</p>
+                </div>
+                {% endif %}
+                {% if student.projects %}
+                <div style="background:#1e1e1f;border-radius:0.5rem;padding:0.75rem 1rem;">
+                    <p style="color:#aaa;font-size:0.8rem;margin-bottom:0.25rem;">Projects</p>
+                    <p>{{ student.projects }}</p>
+                </div>
+                {% endif %}
+                {% if student.timings %}
+                <div style="background:#1e1e1f;border-radius:0.5rem;padding:0.75rem 1rem;">
+                    <p style="color:#aaa;font-size:0.8rem;margin-bottom:0.25rem;">Availability</p>
+                    <p>{{ student.timings }}</p>
+                </div>
+                {% endif %}
+            </div>
+
+            <div style="margin-top:1rem;">
+                <a href="{% url 'student-dashboard' %}" class="primary-btn small-btn">Edit Profile</a>
+            </div>
+        </section>
+    </main>
+</div>
+{% endblock %}

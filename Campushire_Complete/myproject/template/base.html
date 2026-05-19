@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Campus Hire{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style-desk.css' %}">
+    <style>
+        .ch-messages { position: fixed; top: 1rem; right: 1rem; z-index: 9999; display: flex; flex-direction: column; gap: 0.5rem; }
+        .ch-alert { padding: 0.75rem 1.25rem; border-radius: 0.5rem; font-size: 0.9rem; font-weight: 500; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+        .ch-alert-success { background: #22c55e; color: #fff; }
+        .ch-alert-error { background: #ef4444; color: #fff; }
+        .ch-alert-info { background: #3b82f6; color: #fff; }
+        .ch-alert-warning { background: #f59e0b; color: #fff; }
+        .status-pending { color: #f59e0b; font-weight: 600; }
+        .status-shortlisted { color: #3b82f6; font-weight: 600; }
+        .status-rejected { color: #ef4444; font-weight: 600; }
+        .status-hired { color: #22c55e; font-weight: 600; }
+        .badge-approved { background: #22c55e; color: #fff; padding: 0.2rem 0.5rem; border-radius: 0.3rem; font-size: 0.75rem; }
+        .badge-pending-approval { background: #f59e0b; color: #fff; padding: 0.2rem 0.5rem; border-radius: 0.3rem; font-size: 0.75rem; }
+    </style>
+</head>
+<body>
+    {% if messages %}
+    <div class="ch-messages">
+        {% for msg in messages %}
+        <div class="ch-alert ch-alert-{{ msg.tags }}">{{ msg }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% block content %}{% endblock %}
+    <script src="{% static 'css/Js/script.js' %}"></script>
+    <script>
+        setTimeout(() => {
+            document.querySelectorAll('.ch-alert').forEach(el => el.style.opacity = '0');
+        }, 3500);
+    </script>
+</body>
+</html>

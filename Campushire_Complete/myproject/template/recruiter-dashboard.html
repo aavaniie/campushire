@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+
+{% block title %}Recruiter Dashboard - Campus Hire{% endblock %}
+
+{% block content %}
+<div class="ch-dashboard-container">
+    <aside class="ch-dashboard-sidebar">
+        <div class="brand"><h2><span class="ch-blue">Campus</span> Hire</h2></div>
+        <nav>
+            <ul>
+                <li class="active"><a href="{% url 'recruiter-dashboard' %}">Dashboard</a></li>
+                <li><a href="{% url 'postjob' %}">Post Job</a></li>
+                <li><a href="{% url 'view-jobs' %}">My Jobs</a></li>
+                <li><a href="{% url 'viewst' %}">Applicants</a></li>
+                <li><a href="{% url 'ranks' %}">Leaderboard</a></li>
+                <li><a href="{% url 'logout' %}" style="color:#ef4444;">Logout</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="ch-dashboard-main">
+        <h1 class="h2">Recruiter Dashboard
+            {% if recruiter.is_approved %}
+                <span class="badge-approved">Approved</span>
+            {% else %}
+                <span class="badge-pending-approval">Pending Approval</span>
+            {% endif %}
+        </h1>
+        <p style="color:#aaa;">{{ recruiter.company_name }}</p>
+
+        <div class="ch-tabs">
+            <button class="tab-btn active" data-tab="jobs-tab">My Jobs ({{ jobs|length }})</button>
+            <button class="tab-btn" data-tab="applicants-tab">Applicants</button>
+        </div>
+
+        <!-- Jobs Tab -->
+        <section id="jobs-tab" class="tab-content ch-dashboard-section" style="display:block;">
+            <div class="section-header">
+                <h3 class="h3">Posted Jobs</h3>
+                <a href="{% url 'postjob' %}" class="primary-btn small-btn">+ Post New</a>
+            </div>
+            <ul class="dashboard-list">
+                {% for job in jobs %}
+                <li style="display:flex;justify-content:space-between;align-items:center;padding:0.5rem 0;border-bottom:1px solid #333;">
+                    <div>
+                        <a href="{% url 'edit-job' job.id %}" style="font-weight:600;color:#fff;">{{ job.title }}</a>
+                        <span style="color:#aaa;font-size:0.85rem;margin-left:0.5rem;">{{ job.company }}</span>
+                    </div>
+                    <div style="display:flex;gap:0.5rem;align-items:center;">
+                        {% if job.is_active %}<span style="color:#22c55e;font-size:0.85rem;">Active</span>
+                        {% else %}<span style="color:#aaa;font-size:0.85rem;">Closed</span>{% endif %}
+                        <a href="{% url 'edit-job' job.id %}" class="ch-btn-primary" style="padding:0.25rem 0.6rem;font-size:0.8rem;">Edit</a>
+                        <a href="{% url 'schedule-interview' job.id %}" class="ch-btn-secondary" style="padding:0.25rem 0.6rem;font-size:0.8rem;">Schedule</a>
+                    </div>
+                </li>
+                {% empty %}
+                <li>No jobs posted yet. <a href="{% url 'postjob' %}" class="ch-blue">Post one now</a></li>
+                {% endfor %}
+            </ul>
+        </section>
+
+        <!-- Applicants Tab -->
+        <section id="applicants-tab" class="tab-content ch-dashboard-section">
+            <div class="section-header"><h3 class="h3">Applicants by Job</h3></div>
+            {% for item in job_applications %}
+            <div style="margin-bottom:1.5rem;">
+                <h4 style="color:#4b4bd7;margin-bottom:0.75rem;">
+                    {{ item.job.title }} at {{ item.job.company }}
+                    <a href="{% url 'schedule-interview' item.job.id %}" style="font-size:0.8rem;margin-left:0.75rem;" class="ch-btn-secondary">Schedule Interview</a>
+                </h4>
+                {% if item.applications %}
+                <div style="display:flex;flex-direction:column;gap:0.5rem;">
+                    {% for app in item.applications %}
+                    <div style="background:#1e1e1f;border-radius:0.5rem;padding:0.75rem 1rem;">
+                        <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:0.5rem;">
+                            <div>
+                                <a href="{% url 'student-profile' app.student.id %}" style="font-weight:600;color:#fff;">{{ app.student.user.username }}</a>
+                                <span style="color:#aaa;font-size:0.8rem;margin-left:0.5rem;">{{ app.student.user.email }}</span>
+                                <p style="color:#aaa;font-size:0.8rem;">Marks: {{ app.student.total_marks }} | Score: {{ app.score }}</p>
+                            </div>
+                            <span class="status-{{ app.status }}">{{ app.get_status_display }}</span>
+                        </div>
+                        <form method="POST" action="{% url 'update-application' app.id %}" style="margin-top:0.75rem;display:flex;flex-wrap:wrap;gap:0.5rem;align-items:center;">
+                            {% csrf_token %}
+                            <select name="status" style="background:#27282a;color:#fff;border:1px solid #444;border-radius:0.3rem;padding:0.25rem 0.5rem;font-size:0.85rem;">
+                                {% for val, label in app.STATUS_CHOICES %}
+                                <option value="{{ val }}" {% if app.status == val %}selected{% endif %}>{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                            <input type="number" name="score" value="{{ app.score }}" min="0" max="100" placeholder="Score (0-100)"
+                                style="background:#27282a;color:#fff;border:1px solid #444;border-radius:0.3rem;padding:0.25rem 0.5rem;font-size:0.85rem;width:120px;">
+                            <input type="text" name="recruiter_notes" value="{{ app.recruiter_notes }}" placeholder="Add a note..."
+                                style="background:#27282a;color:#fff;border:1px solid #444;border-radius:0.3rem;padding:0.25rem 0.5rem;font-size:0.85rem;flex:1;min-width:150px;">
+                            <button type="submit" class="primary-btn small-btn">Update</button>
+                        </form>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p style="color:#aaa;font-size:0.9rem;">No applicants yet.</p>
+                {% endif %}
+            </div>
+            {% empty %}
+            <p style="color:#aaa;">Post a job to see applicants here.</p>
+            {% endfor %}
+        </section>
+    </main>
+</div>
+
+<script>
+document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-content').forEach(tc => tc.style.display = 'none');
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(btn.dataset.tab).style.display = 'block';
+        btn.classList.add('active');
+    });
+});
+</script>
+{% endblock %}

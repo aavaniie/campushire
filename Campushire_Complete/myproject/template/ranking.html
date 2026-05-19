@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %}Leaderboard - Campus Hire{% endblock %}
+
+{% block content %}
+<style>
+.leaderboard { background:rgba(255,255,255,0.05); backdrop-filter:blur(15px); border-radius:16px; border:1px solid rgba(255,255,255,0.1); }
+.leaderboard-list li { display:flex; justify-content:space-between; align-items:center; padding:14px 18px; margin-bottom:12px; border-radius:10px; background:rgba(255,255,255,0.03); transition:0.2s ease; }
+.leaderboard-list li:hover { transform:translateY(-2px); background:rgba(255,255,255,0.08); }
+.rank { font-weight:700; font-size:18px; width:40px; text-align:center; }
+.student-id { flex:1; font-weight:500; color:#eaeaea; margin:0 1rem; }
+.badge { padding:6px 14px; border-radius:20px; font-size:13px; font-weight:600; }
+.badge-rising-star { background:#cd7f32; color:#fff; }
+.badge-top-performer { background:#22c55e; color:#fff; }
+.badge-default { background:#444; color:#fff; }
+.rank-1 { background:rgba(255,215,0,0.15); }
+.rank-2 { background:rgba(192,192,192,0.15); }
+.rank-3 { background:rgba(205,127,50,0.15); }
+.personal-rank-card { margin-top:40px; padding:30px; border-radius:12px; text-align:center; background:linear-gradient(135deg,#3b82f6,#6366f1); color:white; }
+.rank-number { margin:10px 0; font-size:3rem; font-weight:700; }
+.rank-meta { font-size:14px; opacity:0.85; }
+</style>
+
+<section class="ch-dashboard-section leaderboard" style="max-width:700px;margin:50px auto;padding:50px 30px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem;flex-wrap:wrap;gap:1rem;">
+        <h1 class="h2" style="color:#fff;margin:0;">Leaderboard</h1>
+        <a href="{% url 'landing' %}" style="color:#4b4bd7;font-size:0.9rem;">&larr; Home</a>
+    </div>
+
+    <ul class="leaderboard-list" style="list-style:none;padding:0;">
+        {% for student in students %}
+        <li class="{% if forloop.counter == 1 %}rank-1{% elif forloop.counter == 2 %}rank-2{% elif forloop.counter == 3 %}rank-3{% endif %}">
+            <span class="rank">
+                {% if forloop.counter == 1 %}🥇
+                {% elif forloop.counter == 2 %}🥈
+                {% elif forloop.counter == 3 %}🥉
+                {% else %}{{ forloop.counter }}{% endif %}
+            </span>
+            <span class="student-id">{{ student.user.username }}</span>
+            <span style="color:#4b4bd7;font-weight:700;margin-right:0.75rem;">{{ student.total_marks }} pts</span>
+            {% if student.badge %}
+            <span class="badge badge-{{ student.badge|lower|slugify }}">{{ student.badge }}</span>
+            {% else %}
+            <span class="badge badge-default">Participant</span>
+            {% endif %}
+        </li>
+        {% empty %}
+        <li style="color:#aaa;text-align:center;list-style:none;padding:2rem;">No students on the leaderboard yet.</li>
+        {% endfor %}
+    </ul>
+
+    <div class="personal-rank-card">
+        <h4>Your Rank</h4>
+        <p class="rank-number">{% if my_rank %}#{{ my_rank }}{% else %}–{% endif %}</p>
+        <p class="rank-meta">Based on total marks assigned by supervisor</p>
+    </div>
+</section>
+{% endblock %}

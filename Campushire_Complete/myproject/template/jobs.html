@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %}All Jobs - Campus Hire{% endblock %}
+
+{% block content %}
+<div class="ch-dashboard-container">
+    <aside class="ch-dashboard-sidebar">
+        <div class="brand"><h2><span class="ch-blue">Campus</span> Hire</h2></div>
+        <nav>
+            <ul>
+                <li><a href="{% url 'student-dashboard' %}">Dashboard</a></li>
+                <li><a href="{% url 'profile' %}">Profile</a></li>
+                <li class="active"><a href="{% url 'jobs' %}">Jobs</a></li>
+                <li><a href="{% url 'myjobs' %}">My Jobs</a></li>
+                <li><a href="{% url 'my-interviews' %}">My Interviews</a></li>
+                <li><a href="{% url 'ranks' %}">Leaderboard</a></li>
+                <li><a href="{% url 'logout' %}" style="color:#ef4444;">Logout</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="ch-dashboard-main">
+        <h1 class="h2">All Jobs</h1>
+
+        <form method="get" style="margin-bottom:1rem;display:flex;gap:0.5rem;">
+            <input type="text" name="search" value="{{ search }}" placeholder="Search by title, skills, company..."
+                style="background:#27282a;color:#fff;border:1px solid #444;border-radius:0.5rem;padding:0.5rem 0.75rem;flex:1;">
+            <button type="submit" class="primary-btn small-btn">Search</button>
+            {% if search %}<a href="{% url 'jobs' %}" class="ch-btn-secondary" style="padding:0.5rem 0.75rem;border-radius:0.5rem;">Clear</a>{% endif %}
+        </form>
+
+        {% if jobs %}
+        <div class="jobs-grid">
+            {% for job in jobs %}
+            <div class="job-card">
+                <div class="job-card-header">
+                    <h3 style="margin:0;color:#1a1a1a;">{{ job.title }}</h3>
+                    <span class="job-date">{{ job.posted_at|date:"d M Y" }}</span>
+                </div>
+                <p style="color:#555;margin:0.25rem 0;font-size:0.9rem;font-weight:600;">{{ job.company }}</p>
+                <p style="color:#777;font-size:0.85rem;">{{ job.location }} &bull; {{ job.job_type|capfirst }}</p>
+                <p style="color:#555;font-size:0.85rem;margin-top:0.25rem;"><strong>Skills:</strong> {{ job.skills_required }}</p>
+                <p style="color:#333;font-size:0.9rem;margin:0.5rem 0;">{{ job.description|truncatechars:120 }}</p>
+                {% if job.deadline %}
+                <p style="color:#f59e0b;font-size:0.8rem;">Deadline: {{ job.deadline|date:"d M Y" }}</p>
+                {% endif %}
+                <div class="job-actions">
+                    {% if job.id in applied_job_ids %}
+                    <span style="background:#e8e8ff;color:#4b4bd7;padding:0.4rem 0.8rem;border-radius:0.5rem;font-size:0.85rem;font-weight:600;">Applied</span>
+                    {% else %}
+                    <a href="{% url 'apply-job' job.id %}" class="ch-btn-primary">Apply</a>
+                    {% endif %}
+                    <a href="{% url 'save-job' job.id %}" class="ch-btn-secondary">Save</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p style="color:#aaa;margin-top:2rem;">No jobs found{% if search %} for "{{ search }}"{% endif %}.</p>
+        {% endif %}
+    </main>
+</div>
+{% endblock %}

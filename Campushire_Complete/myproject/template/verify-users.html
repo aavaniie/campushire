@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block title %}Verify Users - Campus Hire{% endblock %}
+
+{% block content %}
+<div class="ch-dashboard-container">
+    <aside class="ch-dashboard-sidebar">
+        <div class="brand"><h2><span class="ch-blue">Campus</span> Hire</h2></div>
+        <nav>
+            <ul>
+                <li><a href="{% url 'supervisor-dashboard' %}">Dashboard</a></li>
+                <li class="active"><a href="{% url 'verify' %}">Verify Users</a></li>
+                <li><a href="{% url 'allusers' %}">All Users</a></li>
+                <li><a href="{% url 'logout' %}" style="color:#ef4444;">Logout</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="ch-dashboard-main">
+        <h1 class="h2">Verify Users</h1>
+
+        <!-- Pending Students -->
+        <section class="ch-dashboard-section">
+            <div class="section-header">
+                <h3 class="h3">Pending Students ({{ pending_students|length }})</h3>
+            </div>
+            {% if pending_students %}
+            <div style="display:flex;flex-direction:column;gap:0.75rem;margin-top:0.75rem;">
+                {% for student in pending_students %}
+                <div class="job-item" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.75rem;">
+                    <div class="job-info">
+                        <h3 class="job-title">{{ student.user.username }}</h3>
+                        <p class="job-company">{{ student.user.email }}</p>
+                        <p class="job-company">Role: Student | Registered: {{ student.user.date_joined|date:"d M Y" }}</p>
+                        {% if student.skills %}<p class="job-company">Skills: {{ student.skills }}</p>{% endif %}
+                    </div>
+                    <div class="job-actions">
+                        <a href="{% url 'approve-user' student.user.id 'student' %}" class="primary-btn small-btn">Approve</a>
+                        <a href="{% url 'reject-user' student.user.id 'student' %}" class="ch-btn-secondary small-btn"
+                           onclick="return confirm('Reject and permanently delete {{ student.user.username }}?')">Reject</a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p style="color:#aaa;margin-top:0.75rem;">No pending students.</p>
+            {% endif %}
+        </section>
+
+        <!-- Pending Recruiters -->
+        <section class="ch-dashboard-section">
+            <div class="section-header">
+                <h3 class="h3">Pending Recruiters ({{ pending_recruiters|length }})</h3>
+            </div>
+            {% if pending_recruiters %}
+            <div style="display:flex;flex-direction:column;gap:0.75rem;margin-top:0.75rem;">
+                {% for recruiter in pending_recruiters %}
+                <div class="job-item" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.75rem;">
+                    <div class="job-info">
+                        <h3 class="job-title">{{ recruiter.user.username }}</h3>
+                        <p class="job-company">{{ recruiter.user.email }}</p>
+                        <p class="job-company">Company: {{ recruiter.company_name|default:"Not set" }}</p>
+                        <p class="job-company">Registered: {{ recruiter.user.date_joined|date:"d M Y" }}</p>
+                    </div>
+                    <div class="job-actions">
+                        <a href="{% url 'approve-user' recruiter.user.id 'recruiter' %}" class="primary-btn small-btn">Approve</a>
+                        <a href="{% url 'reject-user' recruiter.user.id 'recruiter' %}" class="ch-btn-secondary small-btn"
+                           onclick="return confirm('Reject and permanently delete {{ recruiter.user.username }}?')">Reject</a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p style="color:#aaa;margin-top:0.75rem;">No pending recruiters.</p>
+            {% endif %}
+        </section>
+    </main>
+</div>
+{% endblock %}

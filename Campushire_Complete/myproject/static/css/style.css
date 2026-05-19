@@ -1,0 +1,724 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    outline: none;
+    font-family: "Inter", sans-serif;
+    transition: all 0.3s linear;
+}
+html {
+    font-size: calc(100vw * 16/360);
+    background: #000000;
+}
+a {
+    text-decoration: none;
+    color: inherit;
+}
+h1, .h1 {
+    font-size: 2rem;
+    line-height: 2.5rem;
+}
+h2, .h2 {
+    font-size: 1.75rem;
+    line-height: 2.125rem;
+}
+h3, .h3 {
+    font-size: 1.5rem;
+    line-height: 2rem;
+}
+h4, .h4 {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+}
+h5, .h5 {
+    font-size: 1.125rem;
+    line-height: 1.625rem;
+}
+h6, .h6 , p {
+    font-size: 1rem;
+    line-height: 1.5rem;
+}
+.ch-blue {
+    color: #4b4bd7;
+}
+.container {
+    max-width: 18.75rem;
+    margin: 0 auto;
+}
+/* Form Styles */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+    align-items: flex-start;
+}
+.form-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+input {
+    appearance: none;
+    font-size: 1rem;
+    line-height: 1.5rem;
+    color: #333333;
+    border: none;
+    width: 100%;
+    border-radius: 0.5rem;
+    padding: 0.313rem 0.625rem;
+}
+textarea {
+    appearance: none;
+    font-size: 1rem;
+    line-height: 1.5rem;
+    color: #333333;
+    border: none;
+    width: 100%;
+    border-radius: 0.5rem;
+    padding: 0.313rem 0.625rem;
+}
+select{
+    appearance: none;
+    font-size: 1rem;
+    line-height: 1.5rem;
+    color: #333333;
+    border: none;
+    width: 100%;
+    border-radius: 0.5rem;
+    padding: 0.313rem 0.625rem;
+}
+input::placeholder {
+    font-size: 1rem;
+    line-height: 1.5rem;
+    color: #333333;   
+}
+input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 1rem;
+    min-width: 1rem;
+    height: 1rem;
+    border: 0.063rem solid #555;
+    border-radius: 0.25rem;
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+    padding: 0;
+}
+input[type="checkbox"]:checked {
+    background-color: #000;
+    border-color: #000;
+}
+input[type="checkbox"]:checked::after {
+    content: "";
+    position: absolute;
+    top: 0.125rem;
+    left: 0.313rem;
+    width: 0.25rem;
+    height: 0.5rem;
+    border-right: 0.125rem solid #fff;
+    border-bottom: 0.125rem solid #fff;
+    transform: rotate(45deg);
+}
+label {
+    font-size: 0.875rem;
+    line-height: 1;
+    color: #ffffff;
+    font-weight: 500;
+}
+label.checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.313rem;
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1;
+    color: #ffffff;
+}
+.form-flex p a {
+    font-size: 0.875rem;
+    line-height: 1;    
+    color: #4b4bd7;
+}
+/* Buttons */
+.primary-btn {
+    background-color: #4b4bd7;
+    color: #ffffff;
+    border: none;
+    border-radius: 0.75rem;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    width: fit-content;
+}
+.primary-btn:hover {
+    background-color: #3a3abe;
+}
+/* Login */
+.ch-login-wrap {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.brand {
+    color: #ffffff;
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+.login-card {
+    background: #27282a;
+    padding: 1.875rem 1.25rem;
+    border-radius: 0.75rem;
+    text-align: center;
+}
+.login-card h2 {
+    margin-bottom: 1.25rem;
+}
+.signup-link {
+    margin-top: 1.875rem;
+    color: #ffffff;
+}
+/* Landing Page */
+.ch-landing-section {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.875rem;
+    flex-direction: column;
+}
+.ch-landing-sections {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.25rem;
+    flex-direction: column;
+}
+.ch-landing-items {
+    width: 100%;
+    background: #27282a;
+    border-radius: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.625rem;
+    padding: 2.5rem;
+    cursor: pointer;
+}
+.ch-landing-items svg {
+    color: #4b4bd7;
+    width: 2.5rem;
+    height: 2.5rem;
+}
+.ch-landing-items p {
+    color: #ffffff;
+}
+.ch-landing-items:hover {
+    border: 0.0625rem solid #ffffff;
+}
+/* Dashboard Layout */
+/* Mobile-first Dashboard */
+.ch-dashboard-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background: #000;
+}
+/* Sidebar */
+.ch-dashboard-sidebar {
+    width: 100%;
+    background: #27282a;
+    padding: 1.5rem 1rem;
+    display: flex;
+    flex-direction: column;
+    overflow-x: auto;
+    gap: 1rem;
+}
+.ch-dashboard-sidebar .brand h2 {
+    color: #ffffff;
+    flex-shrink: 0;
+    text-align: left;
+    padding: 0.5rem 0.75rem;
+}
+.ch-dashboard-sidebar .brand {
+    margin: 0;
+}
+.ch-dashboard-sidebar nav ul {
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+    gap: 0.75rem;
+    margin: 0;
+    padding: 0;
+}
+.ch-dashboard-sidebar nav ul li {
+    color: #cccccc;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all 0.3s linear;
+}
+.ch-dashboard-sidebar nav ul li.active,
+.ch-dashboard-sidebar nav ul li:hover {
+    background-color: #4b4bd7;
+    color: #ffffff;
+}
+/* Main Content */
+.ch-dashboard-main {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    color: #ffffff;
+}
+/* Dashboard Sections */
+.ch-dashboard-section {
+    background: #27282a;
+    border-radius: 0.75rem;
+    padding: 1rem;
+}
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+.primary-btn.small-btn {
+    padding: 0.25rem 0.75rem;
+    font-size: 0.875rem;
+}
+/* List Styling */
+.dashboard-list {
+    padding-left: 1rem;
+    list-style: disc;
+    margin: 0;
+}
+.dashboard-list li {
+    margin-bottom: 0.5rem;
+    color: #cccccc;
+}
+/* Leaderboard List */
+.leaderboard-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+}
+
+.leaderboard-list li {
+    background: #1e1e1f;
+    padding: 0.875rem 1rem;
+    border-radius: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.leaderboard-list .rank {
+    font-size: 1.25rem;
+    color: #4b4bd7;
+    font-weight: 700;
+}
+
+.leaderboard-list .student-id {
+    font-size: 1rem;
+    color: #ffffff;
+}
+
+/* Personal Rank Card */
+.personal-rank-card {
+    background: #1e1e1f;
+    padding: 1.25rem;
+    border-radius: 0.75rem;
+    text-align: center;
+}
+
+.personal-rank-card h4 {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+    color: #ffffff;
+}
+
+.personal-rank-card .rank-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #4b4bd7;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+}
+
+.personal-rank-card .rank-meta {
+    font-size: 0.875rem;
+    color: #bbbbbb;
+}
+/* ---------------------------
+   Jobs List - Mobile (Base)
+---------------------------- */
+
+.jobs-list-section {
+    margin-top: 1.5rem;
+}
+
+.job-item {
+    background: #fff;
+    border-radius: 0.85rem;
+    padding: 1.2rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 0.0625rem 0.25rem rgb(0 0 0 / 8%);
+}
+
+.job-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.job-company {
+    margin-top: 0.3rem;
+    font-size: 0.95rem;
+    color: #666;
+}
+
+.job-location {
+    margin-top: 0.2rem;
+    font-size: 0.9rem;
+    color: #777;
+}
+
+.job-actions {
+    margin-top: 1rem;
+    display: flex;
+    gap: 0.7rem;
+}
+
+.ch-btn-primary {
+    background: #4b4bd7;
+    color: #fff;
+    padding: 0.55rem 1.2rem;
+    border: none;
+    border-radius: 0.6rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.ch-btn-secondary {
+    background: #e8e8ff;
+    color: #4b4bd7;
+    padding: 0.55rem 1.2rem;
+    border: none;
+    border-radius: 0.6rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+.job-info h3 {
+    color: #000000;
+}
+/* Total Marks Section */
+.total-marks-section {
+    background: #27282a;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    text-align: center;
+}
+
+.total-marks-content .marks-number {
+    font-size: 2rem; /* prominent */
+    font-weight: 700;
+    color: #4b4bd7;
+    margin-bottom: 0.5rem;
+}
+
+.total-marks-content .marks-meta {
+    font-size: 1rem;
+    color: #cccccc;
+    line-height: 1.5rem;
+}
+.selected-dates-list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.selected-dates-list li {
+    background: #4b4bd7;
+    color: #fff;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+}
+
+.selected-dates-list li button {
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-weight: 700;
+    cursor: pointer;
+}
+.availability-picker input {
+    margin: 1.25rem 0;
+}
+.ch-dashboard-sidebar nav ul li a {
+    display: flex;
+}
+/* Container */
+.student-public-profile {
+    color: #ffffff;
+}
+
+/* Header */
+.profile-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    margin-top: 2.5rem;
+}
+
+/* Large Student ID Badge */
+.student-id-badge {
+    display: inline-flex;
+    flex-direction: column;
+    background: linear-gradient(135deg, #4b4bd7, #3434a8);
+    padding: 1.25rem 2rem;
+    border-radius: 1rem;
+    color: #fff;
+    box-shadow: 0 0.5rem 1.25rem rgba(0,0,0,0.25);
+}
+
+.student-id-badge .label {
+    font-size: 0.95rem;
+    opacity: 0.9;
+    letter-spacing: 0.5px;
+}
+
+.student-id-badge .value {
+    font-size: 2.8rem;
+    font-weight: 700;
+    margin-top: 0.25rem;
+}
+
+.profile-title {
+    margin-top: 1.2rem;
+    font-size: 2rem;
+    font-weight: 600;
+}
+
+/* Profile Card */
+.profile-card {
+    background: #1c1c1e;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 0.313rem 1.125rem rgba(0,0,0,0.22);
+    display: flex;
+    flex-direction: column;
+    gap: 1.4rem;
+}
+
+/* Row */
+.profile-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+    background: #000000;
+    padding: 3.125rem 1.875rem;
+    border-radius: 0.75rem;
+    break-inside: avoid;
+}
+
+.profile-row .label {
+    opacity: 0.85;
+}
+
+.profile-row .value {
+    color: #f9fabc;
+    margin-bottom: 1.25rem;
+}
+
+/* Skills Row */
+/* Tabs container */
+.ch-tabs {
+    display: flex;
+    gap: 0.625rem;
+    margin-bottom: 1.25rem;
+    flex-wrap: wrap;
+}
+.tab-btn {
+    padding: 0.5rem 1rem;
+    background-color: #f1f1f1;
+    border: none;
+    border-radius: 0.313rem;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s;
+}
+.tab-btn:hover {
+    background-color: #e0e0e0;
+}
+.tab-btn.active {
+    background-color: #4b4bd7;
+    color: white;
+}
+.tab-content {
+    display: none;
+}
+.tab-content:first-of-type {
+    display: block;
+}
+.dashboard-list.ch-sch-int {
+    padding: 0;
+}
+.dashboard-list.ch-sch-int li {
+    list-style-type: none;
+}
+.tab-content.ch-dashboard-section.mj-dashboard {
+    margin: 0;
+    padding: 0;
+    background: none;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-gap: 1.875rem;
+}
+.tab-content.ch-dashboard-section.mj-dashboard .myjob-list {
+    background-color: #ffffff;
+    border-radius: 0.85rem;
+}
+.tab-content.ch-dashboard-section.mj-dashboard .myjob-list:nth-child(5n+1) .job-item {
+  background: #C8EFD1;
+}
+
+.tab-content.ch-dashboard-section.mj-dashboard .myjob-list:nth-child(5n+2) .job-item {
+  background: #FFD8B8;
+}
+
+.tab-content.ch-dashboard-section.mj-dashboard .myjob-list:nth-child(5n+3) .job-item {
+  background: #E2CCFF;
+}
+
+.tab-content.ch-dashboard-section.mj-dashboard .myjob-list:nth-child(5n+4) .job-item {
+  background: #FFEDB3;
+}
+
+.tab-content.ch-dashboard-section.mj-dashboard .myjob-list:nth-child(5n+5) .job-item {
+  background: #CDE4FF;
+}
+.tab-content.ch-dashboard-section.mj-dashboard .job-item {
+    margin: 1.5rem 1.8rem;
+    background: #bdd8da;
+    box-shadow: none;
+}
+.section-content, .availability-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+}
+.profile-list {
+    margin-top: 2.5rem;
+    display: flex;
+    gap: 1.25rem;
+}
+.profile-list .profile-row {
+    background: white;
+    width: 100%;
+    gap: 0.313rem;
+}
+.profile-list .value {
+    color: #000000;
+    margin: 0;
+}
+.profile-list .label {
+    color: #000000;
+}
+.jobs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+.job-card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 1rem;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.job-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-direction: column;
+}
+
+.job-card-header h3 {
+    margin: 0;
+    color: #1a1a1a;
+}
+
+.job-date {
+    font-size: 0.85rem;
+    color: #555;
+}
+
+.job-desc {
+    margin: 0.5rem 0;
+    color: #333;
+}
+
+.job-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    font-size: 0.9rem;
+    color: #444;
+    flex-direction: column;
+}
+
+.job-actions {
+    margin-top: 0.75rem;
+    display: flex;
+    gap: 0.5rem;
+}
+
+.btn-edit, .btn-delete {
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 0.85rem;
+    margin-top: 1.25rem;
+}
+
+.no-jobs-msg {
+    color: #666;
+    font-style: italic;
+    margin-top: 2rem;
+}
+.job-info {
+    color: black;
+}
+p.job-comp {
+    background: #e7e1e1;
+    padding: 0.313rem 0.625rem;
+    border-radius: 0.5rem;
+    margin: 0.313rem 0;
+    color: #000000;
+    font-weight: 600;
+}

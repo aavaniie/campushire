@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %}My Posted Jobs - Campus Hire{% endblock %}
+
+{% block content %}
+<div class="ch-dashboard-container">
+    <aside class="ch-dashboard-sidebar">
+        <div class="brand"><h2><span class="ch-blue">Campus</span> Hire</h2></div>
+        <nav>
+            <ul>
+                <li><a href="{% url 'recruiter-dashboard' %}">Dashboard</a></li>
+                <li><a href="{% url 'postjob' %}">Post Job</a></li>
+                <li class="active"><a href="{% url 'view-jobs' %}">My Jobs</a></li>
+                <li><a href="{% url 'viewst' %}">Applicants</a></li>
+                <li><a href="{% url 'ranks' %}">Leaderboard</a></li>
+                <li><a href="{% url 'logout' %}" style="color:#ef4444;">Logout</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="ch-dashboard-main">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.5rem;">
+            <h1 class="h2">My Posted Jobs</h1>
+            <a href="{% url 'postjob' %}" class="primary-btn small-btn">+ Post New Job</a>
+        </div>
+
+        {% if jobs %}
+        <div class="jobs-grid">
+            {% for job in jobs %}
+            <div class="job-card">
+                <div class="job-card-header">
+                    <h3 style="margin:0;color:#1a1a1a;">{{ job.title }}</h3>
+                    <span class="job-date">{{ job.posted_at|date:"d M Y" }}</span>
+                </div>
+                <p style="color:#555;margin:0.25rem 0;font-weight:600;">{{ job.company }}</p>
+                <div class="job-meta">
+                    <span><strong>Location:</strong> {{ job.location }}</span>
+                    <span><strong>Type:</strong> {{ job.job_type|capfirst }}</span>
+                    <span><strong>Skills:</strong> {{ job.skills_required }}</span>
+                    <span><strong>Deadline:</strong> {{ job.deadline|date:"d M Y"|default:"None" }}</span>
+                    <span><strong>Status:</strong>
+                        {% if job.is_active %}<span style="color:#22c55e;">Active</span>
+                        {% else %}<span style="color:#aaa;">Closed</span>{% endif %}
+                    </span>
+                </div>
+                <p class="job-desc" style="margin-top:0.5rem;">{{ job.description|truncatechars:150 }}</p>
+                <div class="job-actions">
+                    <a href="{% url 'edit-job' job.id %}" class="ch-btn-primary btn-edit">Edit</a>
+                    <a href="{% url 'schedule-interview' job.id %}" class="ch-btn-secondary btn-edit">Schedule Interview</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="no-jobs-msg">No jobs posted yet. <a href="{% url 'postjob' %}" class="ch-blue">Post your first job</a></p>
+        {% endif %}
+    </main>
+</div>
+{% endblock %}

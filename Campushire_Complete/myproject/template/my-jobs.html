@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+
+{% block title %}My Jobs - Campus Hire{% endblock %}
+
+{% block content %}
+<div class="ch-dashboard-container">
+    <aside class="ch-dashboard-sidebar">
+        <div class="brand"><h2><span class="ch-blue">Campus</span> Hire</h2></div>
+        <nav>
+            <ul>
+                <li><a href="{% url 'student-dashboard' %}">Dashboard</a></li>
+                <li><a href="{% url 'profile' %}">Profile</a></li>
+                <li><a href="{% url 'jobs' %}">Jobs</a></li>
+                <li class="active"><a href="{% url 'myjobs' %}">My Jobs</a></li>
+                <li><a href="{% url 'my-interviews' %}">My Interviews</a></li>
+                <li><a href="{% url 'ranks' %}">Leaderboard</a></li>
+                <li><a href="{% url 'logout' %}" style="color:#ef4444;">Logout</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="ch-dashboard-main">
+        <h1 class="h2">My Jobs</h1>
+
+        <div class="ch-tabs">
+            <button class="tab-btn active" data-tab="applied-tab">Applied ({{ applied_jobs|length }})</button>
+            <button class="tab-btn" data-tab="saved-tab">Saved ({{ saved_jobs|length }})</button>
+            <button class="tab-btn" data-tab="interviews-tab">Interviews ({{ interviews|length }})</button>
+        </div>
+
+        <!-- Applied Jobs -->
+        <section id="applied-tab" class="tab-content ch-dashboard-section" style="display:block;">
+            {% if applied_jobs %}
+            <div style="display:flex;flex-direction:column;gap:0.75rem;">
+                {% for app in applied_jobs %}
+                <div class="job-item" style="border-left:4px solid
+                    {% if app.status == 'shortlisted' %}#3b82f6
+                    {% elif app.status == 'rejected' %}#ef4444
+                    {% elif app.status == 'hired' %}#22c55e
+                    {% else %}#4b4bd7{% endif %};">
+                    <div class="job-info">
+                        <h3 class="job-title">{{ app.job.title }}</h3>
+                        <p class="job-company">{{ app.job.company }} &bull; {{ app.job.location }}</p>
+                        <p class="job-company">Type: {{ app.job.job_type|capfirst }} | Applied: {{ app.applied_at|date:"d M Y" }}</p>
+                        <div style="margin-top:0.5rem;display:flex;gap:0.75rem;align-items:center;flex-wrap:wrap;">
+                            <span class="status-{{ app.status }}">{{ app.get_status_display }}</span>
+                            {% if app.score %}<span style="color:#4b4bd7;font-weight:600;">Score: {{ app.score }}/100</span>{% endif %}
+                        </div>
+                        {% if app.recruiter_notes %}
+                        <p style="margin-top:0.5rem;color:#555;font-size:0.85rem;background:#f5f5f5;padding:0.4rem 0.6rem;border-radius:0.3rem;">
+                            Recruiter note: {{ app.recruiter_notes }}
+                        </p>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p style="color:#aaa;">No applications yet. <a href="{% url 'jobs' %}" class="ch-blue">Find Jobs</a></p>
+            {% endif %}
+        </section>
+
+        <!-- Saved Jobs -->
+        <section id="saved-tab" class="tab-content ch-dashboard-section">
+            {% if saved_jobs %}
+            <div style="display:flex;flex-direction:column;gap:0.75rem;">
+                {% for job in saved_jobs %}
+                <div class="job-item">
+                    <div class="job-info">
+                        <h3 class="job-title">{{ job.title }}</h3>
+                        <p class="job-company">{{ job.company }} &bull; {{ job.location }}</p>
+                        <p class="job-company">{{ job.job_type|capfirst }} | Deadline: {{ job.deadline|date:"d M Y"|default:"N/A" }}</p>
+                    </div>
+                    <div class="job-actions">
+                        <a href="{% url 'apply-job' job.id %}" class="ch-btn-primary">Apply</a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p style="color:#aaa;">No saved jobs. <a href="{% url 'jobs' %}" class="ch-blue">Browse Jobs</a></p>
+            {% endif %}
+        </section>
+
+        <!-- Interviews -->
+        <section id="interviews-tab" class="tab-content ch-dashboard-section">
+            {% if interviews %}
+            <div style="display:flex;flex-direction:column;gap:0.75rem;">
+                {% for iv in interviews %}
+                <div style="background:#1e1e1f;border-radius:0.5rem;padding:1rem;">
+                    <p style="font-weight:600;color:#fff;">{{ iv.job.title }} at {{ iv.job.company }}</p>
+                    <p style="color:#aaa;font-size:0.85rem;">{{ iv.scheduled_at|date:"d M Y, H:i" }} &bull; {{ iv.mode|title }}</p>
+                    {% if iv.location %}<p style="color:#aaa;font-size:0.85rem;">Location: {{ iv.location }}</p>{% endif %}
+                    {% if iv.notes %}<p style="color:#ccc;font-size:0.85rem;">Note: {{ iv.notes }}</p>{% endif %}
+                    <span class="status-{{ iv.status }}">{{ iv.status|title }}</span>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p style="color:#aaa;">No interviews scheduled yet.</p>
+            {% endif %}
+        </section>
+    </main>
+</div>
+
+<script>
+document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-content').forEach(tc => tc.style.display = 'none');
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(btn.dataset.tab).style.display = 'block';
+        btn.classList.add('active');
+    });
+});
+</script>
+{% endblock %}

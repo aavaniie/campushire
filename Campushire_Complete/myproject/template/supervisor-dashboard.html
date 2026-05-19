@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block title %}Supervisor Dashboard - Campus Hire{% endblock %}
+
+{% block content %}
+<div class="ch-dashboard-container">
+    <aside class="ch-dashboard-sidebar">
+        <div class="brand"><h2><span class="ch-blue">Campus</span> Hire</h2></div>
+        <nav>
+            <ul>
+                <li class="active"><a href="{% url 'supervisor-dashboard' %}">Dashboard</a></li>
+                <li><a href="{% url 'verify' %}">Verify Users</a></li>
+                <li><a href="{% url 'allusers' %}">All Users</a></li>
+                <li><a href="{% url 'ranks' %}">Leaderboard</a></li>
+                <li><a href="{% url 'logout' %}" style="color:#ef4444;">Logout</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="ch-dashboard-main">
+        <h1 class="h2">Supervisor Dashboard</h1>
+
+        <!-- Stats Grid -->
+        <section class="ch-dashboard-section">
+            <div class="section-header"><h3 class="h3">Platform Overview</h3></div>
+            <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;margin-top:1rem;">
+                <div style="background:#1e1e1f;border-radius:0.75rem;padding:1.25rem;text-align:center;">
+                    <p style="font-size:2rem;font-weight:700;color:#4b4bd7;">{{ total_students }}</p>
+                    <p style="color:#aaa;font-size:0.9rem;">Total Students</p>
+                    <p style="color:#22c55e;font-size:0.8rem;">{{ approved_students }} approved</p>
+                    <p style="color:#f59e0b;font-size:0.8rem;">{{ pending_students }} pending</p>
+                </div>
+                <div style="background:#1e1e1f;border-radius:0.75rem;padding:1.25rem;text-align:center;">
+                    <p style="font-size:2rem;font-weight:700;color:#4b4bd7;">{{ total_recruiters }}</p>
+                    <p style="color:#aaa;font-size:0.9rem;">Total Recruiters</p>
+                    <p style="color:#22c55e;font-size:0.8rem;">{{ approved_recruiters }} approved</p>
+                </div>
+                <div style="background:#1e1e1f;border-radius:0.75rem;padding:1.25rem;text-align:center;">
+                    <p style="font-size:2rem;font-weight:700;color:#22c55e;">{{ placed_students }}</p>
+                    <p style="color:#aaa;font-size:0.9rem;">Placed Students</p>
+                </div>
+                <div style="background:#1e1e1f;border-radius:0.75rem;padding:1.25rem;text-align:center;">
+                    <p style="font-size:2rem;font-weight:700;color:#4b4bd7;">{{ total_jobs }}</p>
+                    <p style="color:#aaa;font-size:0.9rem;">Total Jobs</p>
+                    <p style="color:#aaa;font-size:0.8rem;">{{ total_applications }} applications</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Actions -->
+        <section class="ch-dashboard-section">
+            <div class="section-header"><h3 class="h3">Quick Actions</h3></div>
+            <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-top:0.75rem;">
+                <a href="{% url 'verify' %}" class="primary-btn">Verify Pending Users</a>
+                <a href="{% url 'allusers' %}" class="ch-btn-secondary" style="padding:0.75rem 1.5rem;border-radius:0.75rem;font-weight:600;">Manage All Users</a>
+                <a href="{% url 'ranks' %}" class="ch-btn-secondary" style="padding:0.75rem 1.5rem;border-radius:0.75rem;font-weight:600;">View Leaderboard</a>
+            </div>
+        </section>
+
+        <!-- Recent Students -->
+        <section class="ch-dashboard-section">
+            <div class="section-header"><h3 class="h3">Recent Students</h3></div>
+            <ul class="dashboard-list" style="list-style:none;padding:0;">
+                {% for s in recent_students %}
+                <li style="display:flex;justify-content:space-between;align-items:center;padding:0.5rem 0;border-bottom:1px solid #333;">
+                    <span>{{ s.user.username }} <span style="color:#aaa;font-size:0.8rem;">{{ s.user.email }}</span></span>
+                    <span>
+                        {% if s.is_approved %}<span class="badge-approved">Approved</span>
+                        {% else %}<span class="badge-pending-approval">Pending</span>{% endif %}
+                        <span style="color:#4b4bd7;margin-left:0.5rem;">{{ s.total_marks }} pts</span>
+                    </span>
+                </li>
+                {% empty %}
+                <li style="color:#aaa;">No students registered yet.</li>
+                {% endfor %}
+            </ul>
+        </section>
+
+        <!-- Recent Recruiters -->
+        <section class="ch-dashboard-section">
+            <div class="section-header"><h3 class="h3">Recent Recruiters</h3></div>
+            <ul class="dashboard-list" style="list-style:none;padding:0;">
+                {% for r in recent_recruiters %}
+                <li style="display:flex;justify-content:space-between;align-items:center;padding:0.5rem 0;border-bottom:1px solid #333;">
+                    <span>{{ r.user.username }} <span style="color:#aaa;font-size:0.8rem;">{{ r.company_name }}</span></span>
+                    {% if r.is_approved %}<span class="badge-approved">Approved</span>
+                    {% else %}<span class="badge-pending-approval">Pending</span>{% endif %}
+                </li>
+                {% empty %}
+                <li style="color:#aaa;">No recruiters registered yet.</li>
+                {% endfor %}
+            </ul>
+        </section>
+    </main>
+</div>
+{% endblock %}

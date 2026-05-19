@@ -1,0 +1,156 @@
+{% extends 'base.html' %}
+
+{% block title %}Student Dashboard - Campus Hire{% endblock %}
+
+{% block content %}
+<div class="ch-dashboard-container">
+    <aside class="ch-dashboard-sidebar">
+        <div class="brand"><h2><span class="ch-blue">Campus</span> Hire</h2></div>
+        <nav>
+            <ul>
+                <li class="active"><a href="{% url 'student-dashboard' %}">Dashboard</a></li>
+                <li><a href="{% url 'profile' %}">Profile</a></li>
+                <li><a href="{% url 'jobs' %}">Jobs</a></li>
+                <li><a href="{% url 'myjobs' %}">My Jobs</a></li>
+                <li><a href="{% url 'my-interviews' %}">My Interviews</a></li>
+                <li><a href="{% url 'ranks' %}">Leaderboard</a></li>
+                <li><a href="{% url 'logout' %}" style="color:#ef4444;">Logout</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="ch-dashboard-main">
+        <h1 class="h2">Welcome, {{ student.user.username }}
+            {% if student.is_approved %}
+                <span class="badge-approved">Approved</span>
+            {% else %}
+                <span class="badge-pending-approval">Pending Approval</span>
+            {% endif %}
+        </h1>
+
+        <div class="ch-tabs">
+            <button class="tab-btn active" data-tab="overview">Overview</button>
+            <button class="tab-btn" data-tab="edit-profile">Edit Profile</button>
+            <button class="tab-btn" data-tab="my-applications">My Applications</button>
+            <button class="tab-btn" data-tab="my-interviews-tab">Interviews</button>
+        </div>
+
+        <!-- Overview Tab -->
+        <section id="overview" class="tab-content ch-dashboard-section" style="display:block;">
+            <div class="section-header"><h3 class="h3">Your Stats</h3></div>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:1rem;">
+                <div style="background:#1e1e1f;border-radius:0.75rem;padding:1.25rem;text-align:center;">
+                    <p style="font-size:2rem;font-weight:700;color:#4b4bd7;">{{ my_rank|default:"–" }}</p>
+                    <p style="color:#aaa;font-size:0.9rem;">Rank</p>
+                </div>
+                <div style="background:#1e1e1f;border-radius:0.75rem;padding:1.25rem;text-align:center;">
+                    <p style="font-size:2rem;font-weight:700;color:#4b4bd7;">{{ student.total_marks }}</p>
+                    <p style="color:#aaa;font-size:0.9rem;">Total Marks</p>
+                </div>
+                <div style="background:#1e1e1f;border-radius:0.75rem;padding:1.25rem;text-align:center;">
+                    <p style="font-size:2rem;font-weight:700;color:#4b4bd7;">{{ student.interview_attended }}</p>
+                    <p style="color:#aaa;font-size:0.9rem;">Interviews</p>
+                </div>
+            </div>
+            {% if student.placed %}
+            <div style="margin-top:1rem;background:#16a34a;color:#fff;padding:1rem;border-radius:0.75rem;">
+                Placed at <strong>{{ student.company }}</strong>
+            </div>
+            {% endif %}
+            {% if student.badge %}
+            <div style="margin-top:0.75rem;background:#4b4bd7;color:#fff;padding:0.5rem 1rem;border-radius:0.5rem;display:inline-block;">
+                {{ student.badge }}
+            </div>
+            {% endif %}
+        </section>
+
+        <!-- Edit Profile Tab -->
+        <section id="edit-profile" class="tab-content ch-dashboard-section">
+            <div class="section-header"><h3 class="h3">Edit Profile</h3></div>
+            <form method="post">
+                {% csrf_token %}
+                <div class="section-content">
+                    <p><label>Username</label>
+                    <input type="text" name="username" value="{{ student.user.username }}" required></p>
+                    <p><label>Email</label>
+                    <input type="email" name="email" value="{{ student.user.email }}"></p>
+                    <p><label>Skills (comma-separated)</label>
+                    <input type="text" name="skills" value="{{ student.skills }}" placeholder="Python, Django, SQL"></p>
+                    <p><label>Experience</label>
+                    <input type="text" name="experience" value="{{ student.experience }}" placeholder="1 year, 6 months..."></p>
+                    <p><label>Internships</label>
+                    <input type="text" name="internship" value="{{ student.internship }}" placeholder="Company, role, duration..."></p>
+                    <p><label>Projects</label>
+                    <textarea name="projects" rows="3" placeholder="Describe your projects...">{{ student.projects }}</textarea></p>
+                    <p><label>Availability (comma-separated dates)</label>
+                    <input type="text" name="timings" value="{{ student.timings }}" placeholder="Mon-Fri 9am-5pm"></p>
+                    <button type="submit" class="primary-btn small-btn">Save Changes</button>
+                </div>
+            </form>
+        </section>
+
+        <!-- My Applications Tab -->
+        <section id="my-applications" class="tab-content ch-dashboard-section">
+            <div class="section-header"><h3 class="h3">My Applications</h3></div>
+            {% if my_applications %}
+            <div style="display:flex;flex-direction:column;gap:0.75rem;margin-top:0.75rem;">
+                {% for app in my_applications %}
+                <div style="background:#1e1e1f;border-radius:0.5rem;padding:1rem;">
+                    <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:0.5rem;">
+                        <div>
+                            <p style="font-weight:600;font-size:1.05rem;">{{ app.job.title }}</p>
+                            <p style="color:#aaa;font-size:0.85rem;">{{ app.job.company }} &bull; {{ app.job.location }}</p>
+                            <p style="color:#aaa;font-size:0.8rem;">Applied: {{ app.applied_at|date:"d M Y" }}</p>
+                        </div>
+                        <div style="text-align:right;">
+                            <span class="status-{{ app.status }}">{{ app.get_status_display }}</span>
+                            {% if app.score %}
+                            <p style="color:#4b4bd7;font-weight:700;margin-top:0.25rem;">Score: {{ app.score }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% if app.recruiter_notes %}
+                    <p style="margin-top:0.5rem;color:#ccc;font-size:0.85rem;border-top:1px solid #333;padding-top:0.5rem;">
+                        <strong>Recruiter note:</strong> {{ app.recruiter_notes }}
+                    </p>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p style="color:#aaa;margin-top:0.75rem;">No applications yet. <a href="{% url 'jobs' %}" class="ch-blue">Browse Jobs</a></p>
+            {% endif %}
+        </section>
+
+        <!-- Interviews Tab -->
+        <section id="my-interviews-tab" class="tab-content ch-dashboard-section">
+            <div class="section-header"><h3 class="h3">Upcoming Interviews</h3></div>
+            {% if my_interviews %}
+            <div style="display:flex;flex-direction:column;gap:0.75rem;margin-top:0.75rem;">
+                {% for iv in my_interviews %}
+                <div style="background:#1e1e1f;border-radius:0.5rem;padding:1rem;">
+                    <p style="font-weight:600;">{{ iv.job.title }} at {{ iv.job.company }}</p>
+                    <p style="color:#aaa;font-size:0.85rem;">{{ iv.scheduled_at|date:"d M Y, H:i" }} &bull; {{ iv.mode|title }}</p>
+                    {% if iv.location %}<p style="color:#aaa;font-size:0.85rem;">Location: {{ iv.location }}</p>{% endif %}
+                    <span class="status-{{ iv.status }}">{{ iv.status|title }}</span>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p style="color:#aaa;margin-top:0.75rem;">No scheduled interviews yet.</p>
+            {% endif %}
+        </section>
+    </main>
+</div>
+
+<script>
+document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-content').forEach(tc => tc.style.display = 'none');
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(btn.dataset.tab).style.display = 'block';
+        btn.classList.add('active');
+    });
+});
+</script>
+{% endblock %}

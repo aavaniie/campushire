@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}Interviews - Campus Hire{% endblock %}
+
+{% block content %}
+<div class="ch-dashboard-container">
+    <aside class="ch-dashboard-sidebar">
+        <div class="brand"><h2><span class="ch-blue">Campus</span> Hire</h2></div>
+        <nav>
+            <ul>
+                <li><a href="{% url 'recruiter-dashboard' %}">Dashboard</a></li>
+                <li><a href="{% url 'postjob' %}">Post Job</a></li>
+                <li><a href="{% url 'view-jobs' %}">My Jobs</a></li>
+                <li><a href="{% url 'viewst' %}">Applicants</a></li>
+                <li><a href="{% url 'logout' %}" style="color:#ef4444;">Logout</a></li>
+            </ul>
+        </nav>
+    </aside>
+    <main class="ch-dashboard-main">
+        <h1 class="h2">Schedule Interviews</h1>
+        <p style="color:#aaa;">Go to <a href="{% url 'viewst' %}" class="ch-blue">View Applicants</a> and click "Schedule Interview" next to a job to schedule interviews for applicants.</p>
+    </main>
+</div>
+{% endblock %}

@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Job - Campus Hire{% endblock %}
+
+{% block content %}
+<div class="ch-dashboard-container">
+    <aside class="ch-dashboard-sidebar">
+        <div class="brand"><h2><span class="ch-blue">Campus</span> Hire</h2></div>
+        <nav>
+            <ul>
+                <li><a href="{% url 'recruiter-dashboard' %}">Dashboard</a></li>
+                <li><a href="{% url 'postjob' %}">Post Job</a></li>
+                <li class="active"><a href="{% url 'view-jobs' %}">My Jobs</a></li>
+                <li><a href="{% url 'viewst' %}">Applicants</a></li>
+                <li><a href="{% url 'logout' %}" style="color:#ef4444;">Logout</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="ch-dashboard-main">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.5rem;margin-bottom:1rem;">
+            <h1 class="h2">Edit Job</h1>
+            <a href="{% url 'view-jobs' %}" style="color:#4b4bd7;font-size:0.9rem;">&larr; Back to Jobs</a>
+        </div>
+
+        <section class="ch-dashboard-section">
+            <form method="post" style="display:flex;flex-direction:column;gap:1rem;">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label>Job Title</label>
+                    <input type="text" name="title" value="{{ job.title }}" required style="background:#1e1e1f;color:#fff;border:1px solid #444;">
+                </div>
+                <div class="form-group">
+                    <label>Company</label>
+                    <input type="text" name="company" value="{{ job.company }}" required style="background:#1e1e1f;color:#fff;border:1px solid #444;">
+                </div>
+                <div class="form-group">
+                    <label>Location</label>
+                    <input type="text" name="location" value="{{ job.location }}" required style="background:#1e1e1f;color:#fff;border:1px solid #444;">
+                </div>
+                <div class="form-group">
+                    <label>Job Type</label>
+                    <select name="job_type" required style="background:#1e1e1f;color:#fff;border:1px solid #444;">
+                        <option value="full-time" {% if job.job_type == 'full-time' %}selected{% endif %}>Full-time</option>
+                        <option value="internship" {% if job.job_type == 'internship' %}selected{% endif %}>Internship</option>
+                        <option value="part-time" {% if job.job_type == 'part-time' %}selected{% endif %}>Part-time</option>
+                        <option value="remote" {% if job.job_type == 'remote' %}selected{% endif %}>Remote</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Skills Required</label>
+                    <input type="text" name="skills_required" value="{{ job.skills_required }}" required style="background:#1e1e1f;color:#fff;border:1px solid #444;">
+                </div>
+                <div class="form-group">
+                    <label>Job Description</label>
+                    <textarea name="description" rows="5" required style="background:#1e1e1f;color:#fff;border:1px solid #444;border-radius:0.5rem;padding:0.5rem;">{{ job.description }}</textarea>
+                </div>
+                <div class="form-group">
+                    <label>Application Deadline</label>
+                    <input type="date" name="deadline" value="{{ job.deadline|date:'Y-m-d' }}" style="background:#1e1e1f;color:#fff;border:1px solid #444;">
+                </div>
+                <div style="display:flex;align-items:center;gap:0.5rem;">
+                    <input type="checkbox" name="is_active" id="is_active" {% if job.is_active %}checked{% endif %} style="width:1rem;height:1rem;">
+                    <label for="is_active" style="margin:0;">Job is Active (accepting applications)</label>
+                </div>
+                <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
+                    <button type="submit" class="primary-btn">Save Changes</button>
+                    <button type="submit" name="action" value="delete" class="ch-btn-secondary"
+                        style="padding:0.75rem 1.5rem;border-radius:0.75rem;font-weight:600;cursor:pointer;"
+                        onclick="return confirm('Delete this job permanently?')">Delete Job</button>
+                </div>
+            </form>
+        </section>
+    </main>
+</div>
+{% endblock %}
